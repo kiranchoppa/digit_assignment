@@ -1,6 +1,7 @@
 package digit.academy.tutorial.web.controllers;
 
 
+import digit.academy.tutorial.service.AdvocateService;
 import digit.academy.tutorial.web.models.AdvocateListResponse;
 import digit.academy.tutorial.web.models.AdvocateRequest;
 import digit.academy.tutorial.web.models.AdvocateResponse;
@@ -40,10 +41,15 @@ import java.util.*;
 
         private final HttpServletRequest request;
 
+        private final AdvocateService advocateService;
+
         @Autowired
-        public AdvocateApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+        public AdvocateApiController(ObjectMapper objectMapper,
+                                     HttpServletRequest request,
+                                     AdvocateService advocateService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.advocateService = advocateService;
         }
 
                 @RequestMapping(value="/advocate/v1/applicationnumber/_search", method = RequestMethod.POST)
@@ -61,17 +67,12 @@ import java.util.*;
                 }
 
                 @RequestMapping(value="/advocate/v1/_create", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateResponse> advocateV1CreatePost(@Parameter(in = ParameterIn.DEFAULT, description = "Details for the advocate registration + RequestInfo meta data.", required=true, schema=@Schema()) @Valid @RequestBody AdvocateRequest body) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateResponse>(objectMapper.readValue("{  \"advocates\" : [ {    \"barRegistrationNumber\" : \"barRegistrationNumber\",    \"advocateType\" : \"PROSECUTOR, PUBLIC DEFENDER\",    \"organisationID\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ null, null ],    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"tenantId\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"status\" : \"status\"  }, {    \"barRegistrationNumber\" : \"barRegistrationNumber\",    \"advocateType\" : \"PROSECUTOR, PUBLIC DEFENDER\",    \"organisationID\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ null, null ],    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"tenantId\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"status\" : \"status\"  } ],  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  }}", AdvocateResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+                public ResponseEntity<AdvocateResponse> advocateV1CreatePost(
+                        @Parameter(in = ParameterIn.DEFAULT, description = "Details for the advocate registration + RequestInfo meta data.", required=true, schema=@Schema())
+                        @Valid @RequestBody AdvocateRequest body) {
 
-                        return new ResponseEntity<AdvocateResponse>(HttpStatus.NOT_IMPLEMENTED);
+                    AdvocateResponse response = advocateService.createAdvocate(body);
+                    return new ResponseEntity<>(response, HttpStatus.CREATED);
                 }
 
                 @RequestMapping(value="/advocate/v1/_search", method = RequestMethod.POST)
