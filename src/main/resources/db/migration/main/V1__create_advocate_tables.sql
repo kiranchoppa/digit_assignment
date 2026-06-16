@@ -2,8 +2,8 @@ CREATE TABLE eg_advocate (
     id                      VARCHAR(64) PRIMARY KEY,
     tenantid                VARCHAR(128) NOT NULL,
     applicationnumber       VARCHAR(64) NOT NULL,
-    barregistrationnumber   VARCHAR(64),
-    advocatetype            VARCHAR(64),
+    barregistrationnumber   VARCHAR(64) NOT NULL,
+    advocatetype            VARCHAR(64) NOT NULL,
     organisationid          VARCHAR(64),
     individualid            VARCHAR(64) NOT NULL,
     status                  VARCHAR(64),
@@ -18,6 +18,7 @@ CREATE TABLE eg_advocate (
 CREATE TABLE eg_advocate_document (
     id                      VARCHAR(64) PRIMARY KEY,
     advocateid              VARCHAR(64) NOT NULL,
+    tenantid                VARCHAR(128) NOT NULL,
     documenttype            VARCHAR(128),
     filestore               VARCHAR(256),
     documentuid             VARCHAR(64),

@@ -21,6 +21,10 @@ public class AdvocateValidator {
             throw new IllegalArgumentException("RequestInfo.userInfo is required");
         }
 
+        if (!StringUtils.hasText(request.getRequestInfo().getUserInfo().getUuid())) {
+            throw new IllegalArgumentException("RequestInfo.userInfo.uuid is required");
+        }
+
         Advocate advocate = request.getAdvocate();
         if (advocate == null) {
             throw new IllegalArgumentException("Advocate is required");
@@ -32,6 +36,14 @@ public class AdvocateValidator {
 
         if (!StringUtils.hasText(advocate.getIndividualId())) {
             throw new IllegalArgumentException("Advocate individualId is required");
+        }
+
+        if (!StringUtils.hasText(advocate.getAdvocateType())) {
+            throw new IllegalArgumentException("Advocate advocateType is required");
+        }
+
+        if (!StringUtils.hasText(advocate.getBarRegistrationNumber())) {
+            throw new IllegalArgumentException("Advocate barRegistrationNumber is required");
         }
     }
 }

@@ -93,4 +93,7 @@ public class Configuration {
     //Kafka
     @Value("${advocate.kafka.create.topic}")
     private String advocateCreateTopic;
+
+    @Value("${advocate.kafka.update.topic}")
+    private String advocateUpdateTopic;
 }
