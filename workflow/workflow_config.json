@@ -1,0 +1,145 @@
+{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "ver": "1.0",
+    "ts": "",
+    "action": "_create",
+    "did": "1",
+    "key": "",
+    "msgId": "1|en_IN",
+    "requesterId": "",
+    "authToken": "{{authToken}}"
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "pg",
+      "businessService": "ADVOCATE_REGISTRATION",
+      "business": "digit-assignment",
+      "businessServiceSla": 259200000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "APPLY",
+              "nextState": "PENDINGVERIFICATION",
+              "roles": ["CITIZEN", "ADVOCATE"]
+            }
+          ]
+        },
+        {
+          "sla": 172800000,
+          "state": "PENDINGVERIFICATION",
+          "applicationStatus": "INWORKFLOW",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "APPROVE",
+              "nextState": "APPROVED",
+              "roles": ["NYAY_MITRA"]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": ["NYAY_MITRA"]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "ACTIVE",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": []
+        },
+        {
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": []
+        }
+      ]
+    },
+    {
+      "tenantId": "pg",
+      "businessService": "ADVOCATE_CLERK_REGISTRATION",
+      "business": "digit-assignment",
+      "businessServiceSla": 259200000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "APPLY",
+              "nextState": "PENDINGVERIFICATION",
+              "roles": ["CITIZEN", "ADVOCATE_CLERK"]
+            }
+          ]
+        },
+        {
+          "sla": 172800000,
+          "state": "PENDINGVERIFICATION",
+          "applicationStatus": "INWORKFLOW",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "APPROVE",
+              "nextState": "APPROVED",
+              "roles": ["NYAY_MITRA"]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": ["NYAY_MITRA"]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "ACTIVE",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": []
+        },
+        {
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": []
+        }
+      ]
+    }
+  ]
+}

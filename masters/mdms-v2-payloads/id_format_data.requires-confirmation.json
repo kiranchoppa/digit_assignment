@@ -1,0 +1,14 @@
+[
+  {
+    "idName": "UNRESOLVED_ADVOCATE_APPLICATION_NUMBER_ID_NAME",
+    "format": "ADVOC_<SeqNumber>_<Year>",
+    "description": "PRD-confirmed display format. Replace idName and format syntax with the exact local IDGen/MDMS v2 values before upload.",
+    "isActive": false
+  },
+  {
+    "idName": "UNRESOLVED_ADVOCATE_CLERK_APPLICATION_NUMBER_ID_NAME",
+    "format": "ADVOC_CLERK_<SeqNumber>_<Year>",
+    "description": "PRD-confirmed display format. Replace idName and format syntax with the exact local IDGen/MDMS v2 values before upload.",
+    "isActive": false
+  }
+]

@@ -89,4 +89,19 @@ public class Configuration {
     //SMSNotification
     @Value("${egov.sms.notification.topic}")
     private String smsNotificationTopic;
+
+    @Value("${advocate.kafka.create.topic}")
+    private String advocateCreateTopic;
+
+    @Value("${advocate.kafka.update.topic}")
+    private String advocateUpdateTopic;
+
+    @Value("${clerk.kafka.create.topic}")
+    private String clerkCreateTopic;
+
+    @Value("${clerk.kafka.update.topic}")
+    private String clerkUpdateTopic;
+
+    @Value("${is.workflow.enabled:true}")
+    private Boolean workflowEnabled;
 }

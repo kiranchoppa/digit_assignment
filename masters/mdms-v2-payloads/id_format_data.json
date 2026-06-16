@@ -1,0 +1,14 @@
+[
+  {
+    "idName": "advocate.applicationid",
+    "format": "ADVOC_[SEQ_EG_ADVOCATE]_[cy:yyyy]",
+    "description": "Application number format for advocate registration.",
+    "isActive": true
+  },
+  {
+    "idName": "advocate.clerk.applicationid",
+    "format": "ADVOC_CLERK_[SEQ_EG_ADVOCATE_CLERK]_[cy:yyyy]",
+    "description": "Application number format for advocate clerk registration.",
+    "isActive": true
+  }
+]

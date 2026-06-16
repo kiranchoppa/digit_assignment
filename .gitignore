@@ -1,5 +1,6 @@
 target/
-build/
+build/*
+!build/digit_assignment.jar
 *.class
 .idea/
 .vscode/

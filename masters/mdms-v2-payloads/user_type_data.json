@@ -1,0 +1,12 @@
+[
+  {
+    "code": "ADVOCATE",
+    "displayName": "Advocate",
+    "isActive": true
+  },
+  {
+    "code": "ADVOCATE_CLERK",
+    "displayName": "Advocate Clerk",
+    "isActive": true
+  }
+]

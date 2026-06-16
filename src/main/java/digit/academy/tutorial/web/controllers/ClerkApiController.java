@@ -1,119 +1,121 @@
 package digit.academy.tutorial.web.controllers;
 
-
+import digit.academy.tutorial.service.AdvocateService;
+import digit.academy.tutorial.web.models.AdvocateClerk;
 import digit.academy.tutorial.web.models.AdvocateClerkListResponse;
 import digit.academy.tutorial.web.models.AdvocateClerkRequest;
 import digit.academy.tutorial.web.models.AdvocateClerkResponse;
+import digit.academy.tutorial.web.models.AdvocateClerkSearchCriteria;
 import digit.academy.tutorial.web.models.AdvocateClerkSearchRequest;
-import digit.academy.tutorial.web.models.ErrorResponse;
-    import com.fasterxml.jackson.databind.ObjectMapper;
+import digit.academy.tutorial.web.models.Pagination;
+import digit.academy.tutorial.web.models.RequestInfo;
+import digit.academy.tutorial.web.models.ResponseInfo;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
-import java.io.IOException;
-import java.util.*;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-    import javax.validation.constraints.*;
-    import javax.validation.Valid;
-    import javax.servlet.http.HttpServletRequest;
-        import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 @javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2026-06-15T17:43:10.444664432+05:30[Asia/Kolkata]")
 @Controller
-    @RequestMapping("")
-    public class ClerkApiController{
+@RequestMapping("")
+public class ClerkApiController {
 
-        private final ObjectMapper objectMapper;
+    private final AdvocateService advocateService;
 
-        private final HttpServletRequest request;
+    @Autowired
+    public ClerkApiController(HttpServletRequest request, AdvocateService advocateService) {
+        this.advocateService = advocateService;
+    }
 
-        @Autowired
-        public ClerkApiController(ObjectMapper objectMapper, HttpServletRequest request) {
-        this.objectMapper = objectMapper;
-        this.request = request;
-        }
+    @RequestMapping(value = "/clerk/v1/_create", method = RequestMethod.POST)
+    public ResponseEntity<AdvocateClerkResponse> clerkV1CreatePost(
+        @Parameter(in = ParameterIn.DEFAULT, description = "Details for the user registration + RequestInfo meta data.", required = true, schema = @Schema())
+        @Valid @RequestBody AdvocateClerkRequest body) {
 
-                @RequestMapping(value="/clerk/v1/applicationnumber/_search", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateClerkResponse> clerkV1ApplicationnumberSearchPost(@NotNull @Parameter(in = ParameterIn.QUERY, description = "applicationNumber of clerks registration being searched" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "applicationNumber", required = true) String applicationNumber,@NotNull @Parameter(in = ParameterIn.QUERY, description = "Search by tenantId" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "tenantId", required = true) String tenantId) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateClerkResponse>(objectMapper.readValue("{  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  },  \"clerks\" : [ {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  }, {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  } ]}", AdvocateClerkResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+        AdvocateClerk clerk = advocateService.createClerk(body);
+        return new ResponseEntity<>(clerkResponse(body.getRequestInfo(), Collections.singletonList(clerk)), HttpStatus.CREATED);
+    }
 
-                        return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.NOT_IMPLEMENTED);
-                }
+    @RequestMapping(value = "/clerk/v1/_update", method = RequestMethod.POST)
+    public ResponseEntity<AdvocateClerkResponse> clerkV1UpdatePost(
+        @Parameter(in = ParameterIn.DEFAULT, description = "Details of the registered advocate + RequestInfo meta data.", required = true, schema = @Schema())
+        @Valid @RequestBody AdvocateClerkRequest body) {
 
-                @RequestMapping(value="/clerk/v1/_create", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateClerkResponse> clerkV1CreatePost(@Parameter(in = ParameterIn.DEFAULT, description = "Details for the user registration + RequestInfo meta data.", required=true, schema=@Schema()) @Valid @RequestBody AdvocateClerkRequest body) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateClerkResponse>(objectMapper.readValue("{  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  },  \"clerks\" : [ {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  }, {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  } ]}", AdvocateClerkResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+        AdvocateClerk clerk = advocateService.updateClerk(body);
+        return ResponseEntity.ok(clerkResponse(body.getRequestInfo(), Collections.singletonList(clerk)));
+    }
 
-                        return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.NOT_IMPLEMENTED);
-                }
+    @RequestMapping(value = "/clerk/v1/applicationnumber/_search", method = RequestMethod.POST)
+    public ResponseEntity<AdvocateClerkResponse> clerkV1ApplicationnumberSearchPost(
+        @NotNull @Parameter(in = ParameterIn.QUERY, description = "applicationNumber of clerks registration being searched", required = true, schema = @Schema())
+        @Valid @RequestParam(value = "applicationNumber", required = true) String applicationNumber,
+        @NotNull @Parameter(in = ParameterIn.QUERY, description = "Search by tenantId", required = true, schema = @Schema())
+        @Valid @RequestParam(value = "tenantId", required = true) String tenantId) {
 
-                @RequestMapping(value="/clerk/v1/_search", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateClerkListResponse> clerkV1SearchPost(@Parameter(in = ParameterIn.DEFAULT, description = "Search criteria + RequestInfo meta data.", required=true, schema=@Schema()) @Valid @RequestBody AdvocateClerkSearchRequest body) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateClerkListResponse>(objectMapper.readValue("{  \"pagination\" : {    \"offSet\" : 6.027456183070403,    \"limit\" : 8.008281904610115,    \"sortBy\" : \"sortBy\",    \"totalCount\" : 1.4658129805029452,    \"order\" : \"\"  },  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  },  \"clerks\" : [ {    \"applicationNumber\" : \"applicationNumber\",    \"responseList\" : [ {      \"workflow\" : {        \"documents\" : [ {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        }, {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        } ],        \"action\" : \"action\",        \"assignees\" : [ \"assignees\", \"assignees\" ],        \"comment\" : \"comment\",        \"status\" : \"status\"      },      \"applicationNumber\" : \"applicationNumber\",      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"auditDetails\" : {        \"lastModifiedTime\" : 1,        \"createdBy\" : \"createdBy\",        \"lastModifiedBy\" : \"lastModifiedBy\",        \"createdTime\" : 6      },      \"tenantId\" : \"kl\",      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",      \"individualId\" : \"individualId\",      \"isActive\" : true,      \"additionalDetails\" : { },      \"stateRegnNumber\" : \"stateRegnNumber\",      \"status\" : \"status\"    }, {      \"workflow\" : {        \"documents\" : [ {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        }, {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        } ],        \"action\" : \"action\",        \"assignees\" : [ \"assignees\", \"assignees\" ],        \"comment\" : \"comment\",        \"status\" : \"status\"      },      \"applicationNumber\" : \"applicationNumber\",      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"auditDetails\" : {        \"lastModifiedTime\" : 1,        \"createdBy\" : \"createdBy\",        \"lastModifiedBy\" : \"lastModifiedBy\",        \"createdTime\" : 6      },      \"tenantId\" : \"kl\",      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",      \"individualId\" : \"individualId\",      \"isActive\" : true,      \"additionalDetails\" : { },      \"stateRegnNumber\" : \"stateRegnNumber\",      \"status\" : \"status\"    } ],    \"id\" : \"id\",    \"individualId\" : \"individualId\",    \"stateRegnNumber\" : \"stateRegnNumber\"  }, {    \"applicationNumber\" : \"applicationNumber\",    \"responseList\" : [ {      \"workflow\" : {        \"documents\" : [ {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        }, {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        } ],        \"action\" : \"action\",        \"assignees\" : [ \"assignees\", \"assignees\" ],        \"comment\" : \"comment\",        \"status\" : \"status\"      },      \"applicationNumber\" : \"applicationNumber\",      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"auditDetails\" : {        \"lastModifiedTime\" : 1,        \"createdBy\" : \"createdBy\",        \"lastModifiedBy\" : \"lastModifiedBy\",        \"createdTime\" : 6      },      \"tenantId\" : \"kl\",      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",      \"individualId\" : \"individualId\",      \"isActive\" : true,      \"additionalDetails\" : { },      \"stateRegnNumber\" : \"stateRegnNumber\",      \"status\" : \"status\"    }, {      \"workflow\" : {        \"documents\" : [ {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        }, {          \"documentType\" : \"documentType\",          \"documentUid\" : \"documentUid\",          \"fileStore\" : \"fileStore\",          \"id\" : \"id\",          \"additionalDetails\" : { }        } ],        \"action\" : \"action\",        \"assignees\" : [ \"assignees\", \"assignees\" ],        \"comment\" : \"comment\",        \"status\" : \"status\"      },      \"applicationNumber\" : \"applicationNumber\",      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"auditDetails\" : {        \"lastModifiedTime\" : 1,        \"createdBy\" : \"createdBy\",        \"lastModifiedBy\" : \"lastModifiedBy\",        \"createdTime\" : 6      },      \"tenantId\" : \"kl\",      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",      \"individualId\" : \"individualId\",      \"isActive\" : true,      \"additionalDetails\" : { },      \"stateRegnNumber\" : \"stateRegnNumber\",      \"status\" : \"status\"    } ],    \"id\" : \"id\",    \"individualId\" : \"individualId\",    \"stateRegnNumber\" : \"stateRegnNumber\"  } ]}", AdvocateClerkListResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateClerkListResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+        List<AdvocateClerk> clerks = advocateService.searchClerks(tenantId, applicationNumber, null);
+        return ResponseEntity.ok(clerkResponse(null, clerks));
+    }
 
-                        return new ResponseEntity<AdvocateClerkListResponse>(HttpStatus.NOT_IMPLEMENTED);
-                }
+    @RequestMapping(value = "/clerk/v1/status/_search", method = RequestMethod.POST)
+    public ResponseEntity<AdvocateClerkResponse> clerkV1StatusSearchPost(
+        @NotNull @Parameter(in = ParameterIn.QUERY, description = "status of clerks registration being searched", required = true, schema = @Schema())
+        @Valid @RequestParam(value = "status", required = true) String status,
+        @NotNull @Parameter(in = ParameterIn.QUERY, description = "Search by tenantId", required = true, schema = @Schema())
+        @Valid @RequestParam(value = "tenantId", required = true) String tenantId) {
 
-                @RequestMapping(value="/clerk/v1/status/_search", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateClerkResponse> clerkV1StatusSearchPost(@NotNull @Parameter(in = ParameterIn.QUERY, description = "status of clerks registration being searched" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "status", required = true) String status,@NotNull @Parameter(in = ParameterIn.QUERY, description = "Search by tenantId" ,required=true,schema=@Schema()) @Valid @RequestParam(value = "tenantId", required = true) String tenantId) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateClerkResponse>(objectMapper.readValue("{  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  },  \"clerks\" : [ {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  }, {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  } ]}", AdvocateClerkResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+        List<AdvocateClerk> clerks = advocateService.searchClerks(tenantId, null, status);
+        return ResponseEntity.ok(clerkResponse(null, clerks));
+    }
 
-                        return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.NOT_IMPLEMENTED);
-                }
+    @RequestMapping(value = "/clerk/v1/_search", method = RequestMethod.POST)
+    public ResponseEntity<AdvocateClerkListResponse> clerkV1SearchPost(
+        @Parameter(in = ParameterIn.DEFAULT, description = "Search criteria + RequestInfo meta data.", required = true, schema = @Schema())
+        @Valid @RequestBody AdvocateClerkSearchRequest body) {
 
-                @RequestMapping(value="/clerk/v1/_update", method = RequestMethod.POST)
-                public ResponseEntity<AdvocateClerkResponse> clerkV1UpdatePost(@Parameter(in = ParameterIn.DEFAULT, description = "Details of the registered advocate + RequestInfo meta data.", required=true, schema=@Schema()) @Valid @RequestBody AdvocateClerkRequest body) {
-                        String accept = request.getHeader("Accept");
-                            if (accept != null && accept.contains("application/json")) {
-                            try {
-                            return new ResponseEntity<AdvocateClerkResponse>(objectMapper.readValue("{  \"responseInfo\" : {    \"ver\" : \"ver\",    \"resMsgId\" : \"resMsgId\",    \"msgId\" : \"msgId\",    \"apiId\" : \"apiId\",    \"ts\" : 0,    \"status\" : \"SUCCESSFUL\"  },  \"clerks\" : [ {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  }, {    \"workflow\" : {      \"documents\" : [ {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      }, {        \"documentType\" : \"documentType\",        \"documentUid\" : \"documentUid\",        \"fileStore\" : \"fileStore\",        \"id\" : \"id\",        \"additionalDetails\" : { }      } ],      \"action\" : \"action\",      \"assignees\" : [ \"assignees\", \"assignees\" ],      \"comment\" : \"comment\",      \"status\" : \"status\"    },    \"applicationNumber\" : \"applicationNumber\",    \"documents\" : [ {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    }, {      \"documentType\" : \"documentType\",      \"documentUid\" : \"documentUid\",      \"fileStore\" : \"fileStore\",      \"id\" : \"id\",      \"additionalDetails\" : { }    } ],    \"auditDetails\" : {      \"lastModifiedTime\" : 1,      \"createdBy\" : \"createdBy\",      \"lastModifiedBy\" : \"lastModifiedBy\",      \"createdTime\" : 6    },    \"tenantId\" : \"kl\",    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",    \"individualId\" : \"individualId\",    \"isActive\" : true,    \"additionalDetails\" : { },    \"stateRegnNumber\" : \"stateRegnNumber\",    \"status\" : \"status\"  } ]}", AdvocateClerkResponse.class), HttpStatus.NOT_IMPLEMENTED);
-                            } catch (IOException e) {
-                            return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-                            }
-                            }
+        List<AdvocateClerkSearchCriteria> results = advocateService.searchClerks(body.getTenantId(), body.getCriteria());
+        Pagination pagination = Pagination.builder()
+            .offSet(0d)
+            .limit(100d)
+            .totalCount((double) results.stream().mapToInt(item -> item.getResponseList() == null ? 0 : item.getResponseList().size()).sum())
+            .build();
 
-                        return new ResponseEntity<AdvocateClerkResponse>(HttpStatus.NOT_IMPLEMENTED);
-                }
+        AdvocateClerkListResponse response = AdvocateClerkListResponse.builder()
+            .responseInfo(responseInfo(body.getRequestInfo()))
+            .clerks(results)
+            .pagination(pagination)
+            .build();
+        return ResponseEntity.ok(response);
+    }
 
-        }
+    private AdvocateClerkResponse clerkResponse(RequestInfo requestInfo, List<AdvocateClerk> clerks) {
+        return AdvocateClerkResponse.builder()
+            .responseInfo(responseInfo(requestInfo))
+            .clerks(clerks)
+            .build();
+    }
+
+    private ResponseInfo responseInfo(RequestInfo requestInfo) {
+        return ResponseInfo.builder()
+            .apiId(requestInfo == null ? "Rainmaker" : requestInfo.getApiId())
+            .ver(requestInfo == null ? "1.0" : requestInfo.getVer())
+            .ts(requestInfo == null ? System.currentTimeMillis() : requestInfo.getTs())
+            .msgId(requestInfo == null ? null : requestInfo.getMsgId())
+            .resMsgId(UUID.randomUUID().toString())
+            .status(ResponseInfo.StatusEnum.SUCCESSFUL)
+            .build();
+    }
+}

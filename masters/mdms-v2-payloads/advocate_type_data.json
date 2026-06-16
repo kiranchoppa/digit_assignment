@@ -1,0 +1,22 @@
+[
+  {
+    "code": "PROSECUTOR",
+    "displayName": "Prosecutor",
+    "isActive": true
+  },
+  {
+    "code": "PUBLIC_DEFENDER",
+    "displayName": "Public Defender",
+    "isActive": true
+  },
+  {
+    "code": "ADVOCATE_GENERAL",
+    "displayName": "Advocate General",
+    "isActive": true
+  },
+  {
+    "code": "STANDING_COUNSEL",
+    "displayName": "Standing Counsel",
+    "isActive": true
+  }
+]

@@ -1,0 +1,63 @@
+ServiceMaps:
+  serviceName: digit_assignment
+  version: 1.0.0
+  mappings:
+    - topic: save-advocate-application
+      configKey: INDEX
+      indexes:
+        - name: digit-assignment-advocate-index
+          type: general
+          id: $.id
+          isBulk: false
+          timeStampField: $.auditDetails.createdTime
+          jsonPath: $.advocate
+          customJsonMapping:
+            indexMapping: {"Data":{"advocate":{}}}
+            fieldMapping:
+              - inJsonPath: $
+                outJsonPath: $.Data.advocate
+
+    - topic: update-advocate-application
+      configKey: INDEX
+      indexes:
+        - name: digit-assignment-advocate-index
+          type: general
+          id: $.id
+          isBulk: false
+          timeStampField: $.auditDetails.lastModifiedTime
+          jsonPath: $.advocate
+          customJsonMapping:
+            indexMapping: {"Data":{"advocate":{}}}
+            fieldMapping:
+              - inJsonPath: $
+                outJsonPath: $.Data.advocate
+
+    - topic: save-advocate-clerk-application
+      configKey: INDEX
+      indexes:
+        - name: digit-assignment-clerk-index
+          type: general
+          id: $.id
+          isBulk: false
+          timeStampField: $.auditDetails.createdTime
+          jsonPath: $.clerk
+          customJsonMapping:
+            indexMapping: {"Data":{"clerk":{}}}
+            fieldMapping:
+              - inJsonPath: $
+                outJsonPath: $.Data.clerk
+
+    - topic: update-advocate-clerk-application
+      configKey: INDEX
+      indexes:
+        - name: digit-assignment-clerk-index
+          type: general
+          id: $.id
+          isBulk: false
+          timeStampField: $.auditDetails.lastModifiedTime
+          jsonPath: $.clerk
+          customJsonMapping:
+            indexMapping: {"Data":{"clerk":{}}}
+            fieldMapping:
+              - inJsonPath: $
+                outJsonPath: $.Data.clerk

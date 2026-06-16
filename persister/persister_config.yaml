@@ -1,0 +1,114 @@
+serviceMaps:
+  serviceName: digit_assignment
+  mappings:
+    - version: 1.0
+      description: Persists advocate registration applications.
+      fromTopic: save-advocate-application
+      isTransaction: true
+      queryMaps:
+        - query: INSERT INTO eg_advocate(id, tenantid, applicationnumber, barregistrationnumber, advocatetype, organisationid, individualid, status, isactive, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+          basePath: $.advocate
+          jsonMaps:
+            - jsonPath: $.advocate.id
+            - jsonPath: $.advocate.tenantId
+            - jsonPath: $.advocate.applicationNumber
+            - jsonPath: $.advocate.barRegistrationNumber
+            - jsonPath: $.advocate.advocateType
+            - jsonPath: $.advocate.organisationID
+            - jsonPath: $.advocate.individualId
+            - jsonPath: $.advocate.status
+            - jsonPath: $.advocate.isActive
+            - jsonPath: $.advocate.auditDetails.createdBy
+            - jsonPath: $.advocate.auditDetails.createdTime
+            - jsonPath: $.advocate.auditDetails.lastModifiedBy
+            - jsonPath: $.advocate.auditDetails.lastModifiedTime
+            - jsonPath: $.advocate.additionalDetails
+              type: JSON
+              dbType: JSONB
+        - query: INSERT INTO eg_advocate_document(id, advocateid, documenttype, filestore, documentuid, additionaldetails) VALUES (?, ?, ?, ?, ?, ?);
+          basePath: $.advocate.documents.*
+          jsonMaps:
+            - jsonPath: $.advocate.documents.*.id
+            - jsonPath: $.advocate.id
+            - jsonPath: $.advocate.documents.*.documentType
+            - jsonPath: $.advocate.documents.*.fileStore
+            - jsonPath: $.advocate.documents.*.documentUid
+            - jsonPath: $.advocate.documents.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+    - version: 1.0
+      description: Updates advocate registration applications.
+      fromTopic: update-advocate-application
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_advocate SET barregistrationnumber = ?, advocatetype = ?, organisationid = ?, individualid = ?, status = ?, isactive = ?, lastmodifiedby = ?, lastmodifiedtime = ?, additionaldetails = ? WHERE applicationnumber = ? AND tenantid = ?;
+          basePath: $.advocate
+          jsonMaps:
+            - jsonPath: $.advocate.barRegistrationNumber
+            - jsonPath: $.advocate.advocateType
+            - jsonPath: $.advocate.organisationID
+            - jsonPath: $.advocate.individualId
+            - jsonPath: $.advocate.status
+            - jsonPath: $.advocate.isActive
+            - jsonPath: $.advocate.auditDetails.lastModifiedBy
+            - jsonPath: $.advocate.auditDetails.lastModifiedTime
+            - jsonPath: $.advocate.additionalDetails
+              type: JSON
+              dbType: JSONB
+            - jsonPath: $.advocate.applicationNumber
+            - jsonPath: $.advocate.tenantId
+
+    - version: 1.0
+      description: Persists advocate clerk registration applications.
+      fromTopic: save-advocate-clerk-application
+      isTransaction: true
+      queryMaps:
+        - query: INSERT INTO eg_advocate_clerk(id, tenantid, applicationnumber, stateregnnumber, individualid, status, isactive, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+          basePath: $.clerk
+          jsonMaps:
+            - jsonPath: $.clerk.id
+            - jsonPath: $.clerk.tenantId
+            - jsonPath: $.clerk.applicationNumber
+            - jsonPath: $.clerk.stateRegnNumber
+            - jsonPath: $.clerk.individualId
+            - jsonPath: $.clerk.status
+            - jsonPath: $.clerk.isActive
+            - jsonPath: $.clerk.auditDetails.createdBy
+            - jsonPath: $.clerk.auditDetails.createdTime
+            - jsonPath: $.clerk.auditDetails.lastModifiedBy
+            - jsonPath: $.clerk.auditDetails.lastModifiedTime
+            - jsonPath: $.clerk.additionalDetails
+              type: JSON
+              dbType: JSONB
+        - query: INSERT INTO eg_advocate_clerk_document(id, clerkid, documenttype, filestore, documentuid, additionaldetails) VALUES (?, ?, ?, ?, ?, ?);
+          basePath: $.clerk.documents.*
+          jsonMaps:
+            - jsonPath: $.clerk.documents.*.id
+            - jsonPath: $.clerk.id
+            - jsonPath: $.clerk.documents.*.documentType
+            - jsonPath: $.clerk.documents.*.fileStore
+            - jsonPath: $.clerk.documents.*.documentUid
+            - jsonPath: $.clerk.documents.*.additionalDetails
+              type: JSON
+              dbType: JSONB
+
+    - version: 1.0
+      description: Updates advocate clerk registration applications.
+      fromTopic: update-advocate-clerk-application
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_advocate_clerk SET stateregnnumber = ?, individualid = ?, status = ?, isactive = ?, lastmodifiedby = ?, lastmodifiedtime = ?, additionaldetails = ? WHERE applicationnumber = ? AND tenantid = ?;
+          basePath: $.clerk
+          jsonMaps:
+            - jsonPath: $.clerk.stateRegnNumber
+            - jsonPath: $.clerk.individualId
+            - jsonPath: $.clerk.status
+            - jsonPath: $.clerk.isActive
+            - jsonPath: $.clerk.auditDetails.lastModifiedBy
+            - jsonPath: $.clerk.auditDetails.lastModifiedTime
+            - jsonPath: $.clerk.additionalDetails
+              type: JSON
+              dbType: JSONB
+            - jsonPath: $.clerk.applicationNumber
+            - jsonPath: $.clerk.tenantId

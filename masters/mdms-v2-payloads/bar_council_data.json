@@ -1,0 +1,14 @@
+[
+  {
+    "code": "BAR",
+    "displayName": "Bar Council",
+    "registrationNumberPattern": "^BAR/[0-9]{4}/[0-9]{5}$",
+    "isActive": true
+  },
+  {
+    "code": "KL",
+    "displayName": "Kerala Bar Council",
+    "registrationNumberPattern": "^KL/[0-9]{4}/[0-9]{5}$",
+    "isActive": true
+  }
+]

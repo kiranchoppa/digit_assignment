@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "DIGIT Assignment - Advocate APIs",
+    "description": "Postman tests for advocate create, update, and search endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/digit_assignment" },
+    { "key": "tenantId", "value": "pg" },
+    { "key": "authToken", "value": "local-token" },
+    { "key": "userUuid", "value": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d" },
+    { "key": "applicationNumber", "value": "" },
+    { "key": "advocateId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Create Advocate",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('created', function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.collectionVariables.set('applicationNumber', json.advocates[0].applicationNumber);",
+              "pm.collectionVariables.set('advocateId', json.advocates[0].id);",
+              "pm.test('application number generated', function () { pm.expect(json.advocates[0].applicationNumber).to.match(/^ADVOC/); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/advocate/v1/_create",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \"1.0\",\n    \"ts\": 1718200000000,\n    \"action\": \"_create\",\n    \"msgId\": \"1|en_IN\",\n    \"authToken\": \"{{authToken}}\",\n    \"userInfo\": {\n      \"id\": 1,\n      \"uuid\": \"{{userUuid}}\",\n      \"userName\": \"advocate-user\",\n      \"name\": \"Test Advocate\",\n      \"type\": \"CITIZEN\",\n      \"tenantId\": \"{{tenantId}}\",\n      \"roles\": [{ \"name\": \"Advocate\", \"code\": \"ADVOCATE\", \"tenantId\": \"{{tenantId}}\" }]\n    }\n  },\n  \"advocate\": {\n    \"tenantId\": \"{{tenantId}}\",\n    \"advocateType\": \"PROSECUTOR\",\n    \"barRegistrationNumber\": \"BAR/2024/12345\",\n    \"individualId\": \"IND-PG-2024-000123\",\n    \"isActive\": true,\n    \"workflow\": { \"action\": \"APPLY\" },\n    \"documents\": [{ \"documentType\": \"BAR_COUNCIL_ID\", \"fileStore\": \"filestore-uuid-1\", \"documentUid\": \"BAR12345\" }],\n    \"additionalDetails\": { \"userType\": \"ADVOCATE\" }\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Advocate",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/advocate/v1/_update",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \"1.0\",\n    \"ts\": 1718200000000,\n    \"action\": \"_update\",\n    \"msgId\": \"2|en_IN\",\n    \"authToken\": \"{{authToken}}\",\n    \"userInfo\": { \"id\": 2, \"uuid\": \"b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e\", \"userName\": \"nyaymitra\", \"type\": \"EMPLOYEE\", \"tenantId\": \"{{tenantId}}\", \"roles\": [{ \"code\": \"NYAY_MITRA\", \"tenantId\": \"{{tenantId}}\" }] }\n  },\n  \"advocate\": {\n    \"id\": \"{{advocateId}}\",\n    \"tenantId\": \"{{tenantId}}\",\n    \"applicationNumber\": \"{{applicationNumber}}\",\n    \"advocateType\": \"PROSECUTOR\",\n    \"barRegistrationNumber\": \"BAR/2024/12345\",\n    \"individualId\": \"IND-PG-2024-000123\",\n    \"workflow\": { \"action\": \"APPROVE\", \"comment\": \"Verified\" }\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Search Advocate",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/advocate/v1/_search",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"RequestInfo\": { \"apiId\": \"Rainmaker\", \"ver\": \"1.0\", \"ts\": 1718200000000, \"action\": \"_search\", \"msgId\": \"3|en_IN\", \"authToken\": \"{{authToken}}\" },\n  \"tenantId\": \"{{tenantId}}\",\n  \"criteria\": [{ \"applicationNumber\": \"{{applicationNumber}}\" }]\n}"
+        }
+      }
+    },
+    {
+      "name": "Search Advocate By Application Number",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/advocate/v1/applicationnumber/_search?tenantId={{tenantId}}&applicationNumber={{applicationNumber}}"
+      }
+    },
+    {
+      "name": "Search Advocate By Status",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/advocate/v1/status/_search?tenantId={{tenantId}}&status=ACTIVE"
+      }
+    }
+  ]
+}
