@@ -1,0 +1,40 @@
+serviceMaps:
+  serviceName: digit-assignment
+  mappings:
+    - version: 1.0
+      description: Persists advocate registration applications
+      fromTopic: save-advocate-application
+      isTransaction: true
+      queryMaps:
+        - query: INSERT INTO eg_advocate (id, tenantid, applicationnumber, barregistrationnumber, advocatetype, organisationid, individualid, status, isactive, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+          basePath: $.advocate
+          jsonMaps:
+            - jsonPath: $.advocate.id
+
+            - jsonPath: $.advocate.tenantId
+
+            - jsonPath: $.advocate.applicationNumber
+
+            - jsonPath: $.advocate.barRegistrationNumber
+
+            - jsonPath: $.advocate.advocateType
+
+            - jsonPath: $.advocate.organisationID
+
+            - jsonPath: $.advocate.individualId
+
+            - jsonPath: $.advocate.status
+
+            - jsonPath: $.advocate.isActive
+
+            - jsonPath: $.advocate.auditDetails.createdBy
+
+            - jsonPath: $.advocate.auditDetails.createdTime
+
+            - jsonPath: $.advocate.auditDetails.lastModifiedBy
+
+            - jsonPath: $.advocate.auditDetails.lastModifiedTime
+
+            - jsonPath: $.advocate.additionalDetails
+              type: JSON
+              dbType: JSONB
