@@ -13,7 +13,10 @@ public class ServiceConstants {
     public static final String IDGEN_ERROR = "IDGEN ERROR";
     public static final String NO_IDS_FOUND_ERROR = "No ids returned from idgen Service";
 
-    public static final String ERROR_WHILE_FETCHING_FROM_MDMS = "Exception occurred while fetching category lists from mdms: ";
+    public static final String ERROR_WHILE_FETCHING_FROM_MDMS = "Exception occurred while fetching master data from mdms: ";
+    public static final String MDMS_SERVICE_ERROR = "MDMS_SERVICE_ERROR";
+    public static final String INVALID_ADVOCATE_TYPE = "INVALID_ADVOCATE_TYPE";
+    public static final String ADVOCATE_TYPE_SCHEMA_CODE = "DIGIT-ASSIGNMENT.AdvocateType";
 
     public static final String RES_MSG_ID = "uief87324";
     public static final String SUCCESSFUL = "successful";

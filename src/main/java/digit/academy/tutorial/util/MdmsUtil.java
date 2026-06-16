@@ -1,17 +1,12 @@
 package digit.academy.tutorial.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import digit.academy.tutorial.config.Configuration;
+import digit.academy.tutorial.web.models.RequestInfo;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.mdms.model.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,60 +17,57 @@ import static digit.academy.tutorial.config.ServiceConstants.*;
 @Component
 public class MdmsUtil {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private static final String REQUEST_INFO = "RequestInfo";
+    private static final String MDMS_CRITERIA = "MdmsCriteria";
+    private static final String TENANT_ID = "tenantId";
+    private static final String SCHEMA_CODE = "schemaCode";
+    private static final String FILTERS = "filters";
+    private static final String CODE = "code";
+    private static final String IS_ACTIVE = "isActive";
+    private static final String MDMS_RESPONSE = "mdms";
 
-    @Autowired
-    private ObjectMapper mapper;
+    private final RestTemplate restTemplate;
+    private final Configuration configs;
 
-    @Autowired
-    private Configuration configs;
-
-
-
-
-    public Map<String, Map<String, JSONArray>> fetchMdmsData(RequestInfo requestInfo, String tenantId, String moduleName,
-                                                                                List<String> masterNameList) {
-        StringBuilder uri = new StringBuilder();
-        uri.append(configs.getMdmsHost()).append(configs.getMdmsEndPoint());
-        MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequest(requestInfo, tenantId, moduleName, masterNameList);
-        Object response = new HashMap<>();
-        Integer rate = 0;
-        MdmsResponse mdmsResponse = new MdmsResponse();
-        try {
-            response = restTemplate.postForObject(uri.toString(), mdmsCriteriaReq, Map.class);
-            mdmsResponse = mapper.convertValue(response, MdmsResponse.class);
-        }catch(Exception e) {
-            log.error(ERROR_WHILE_FETCHING_FROM_MDMS,e);
-        }
-
-        return mdmsResponse.getMdmsRes();
-        //log.info(ulbToCategoryListMap.toString());
+    public MdmsUtil(RestTemplate restTemplate, Configuration configs) {
+        this.restTemplate = restTemplate;
+        this.configs = configs;
     }
 
-    private MdmsCriteriaReq getMdmsRequest(RequestInfo requestInfo, String tenantId,
-                                           String moduleName, List<String> masterNameList) {
-        List<MasterDetail> masterDetailList = new ArrayList<>();
-        for(String masterName: masterNameList) {
-            MasterDetail masterDetail = new MasterDetail();
-            masterDetail.setName(masterName);
-            masterDetailList.add(masterDetail);
+    public boolean isValidAdvocateType(RequestInfo requestInfo, String tenantId, String advocateType) {
+        Map<String, Object> request = buildMdmsSearchRequest(requestInfo, tenantId, advocateType);
+        String uri = configs.getMdmsHost() + configs.getMdmsEndPoint();
+
+        try {
+            Map<String, Object> response = restTemplate.postForObject(uri, request, Map.class);
+            if (response == null || !(response.get(MDMS_RESPONSE) instanceof List)) {
+                throw new CustomException(MDMS_SERVICE_ERROR, "Invalid response received from MDMS");
+            }
+
+            List<?> mdmsData = (List<?>) response.get(MDMS_RESPONSE);
+            return !mdmsData.isEmpty();
+        } catch (CustomException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error(ERROR_WHILE_FETCHING_FROM_MDMS, e);
+            throw new CustomException(MDMS_SERVICE_ERROR, "Unable to validate advocateType from MDMS");
         }
+    }
 
-        ModuleDetail moduleDetail = new ModuleDetail();
-        moduleDetail.setMasterDetails(masterDetailList);
-        moduleDetail.setModuleName(moduleName);
-        List<ModuleDetail> moduleDetailList = new ArrayList<>();
-        moduleDetailList.add(moduleDetail);
+    private Map<String, Object> buildMdmsSearchRequest(RequestInfo requestInfo, String tenantId, String advocateType) {
+        Map<String, Object> filters = new HashMap<>();
+        filters.put(CODE, advocateType);
 
-        MdmsCriteria mdmsCriteria = new MdmsCriteria();
-        mdmsCriteria.setTenantId(tenantId.split("\\.")[0]);
-        mdmsCriteria.setModuleDetails(moduleDetailList);
+        Map<String, Object> mdmsCriteria = new HashMap<>();
+        mdmsCriteria.put(TENANT_ID, tenantId);
+        mdmsCriteria.put(SCHEMA_CODE, ADVOCATE_TYPE_SCHEMA_CODE);
+        mdmsCriteria.put(FILTERS, filters);
+        mdmsCriteria.put(IS_ACTIVE, true);
 
-        MdmsCriteriaReq mdmsCriteriaReq = new MdmsCriteriaReq();
-        mdmsCriteriaReq.setMdmsCriteria(mdmsCriteria);
-        mdmsCriteriaReq.setRequestInfo(requestInfo);
+        Map<String, Object> request = new HashMap<>();
+        request.put(REQUEST_INFO, requestInfo);
+        request.put(MDMS_CRITERIA, mdmsCriteria);
 
-        return mdmsCriteriaReq;
+        return request;
     }
 }
