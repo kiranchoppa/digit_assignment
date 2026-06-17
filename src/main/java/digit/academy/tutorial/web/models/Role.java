@@ -32,6 +32,10 @@ public class Role   {
 
                 private String id = null;
 
+        @JsonProperty("code")
+
+        @Size(max=64)         private String code = null;
+
         @JsonProperty("name")
 
         @Size(max=64)         private String name = null;

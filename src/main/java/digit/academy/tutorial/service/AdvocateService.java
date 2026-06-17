@@ -7,17 +7,21 @@ import digit.academy.tutorial.config.Configuration;
 import digit.academy.tutorial.kafka.Producer;
 import digit.academy.tutorial.repository.AdvocateRepository;
 import digit.academy.tutorial.util.IdgenUtil;
+import digit.academy.tutorial.util.WorkflowUtil;
 import digit.academy.tutorial.validator.AdvocateValidator;
 import digit.academy.tutorial.web.models.*;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import static digit.academy.tutorial.config.ServiceConstants.ADVOCATE_BUSINESS_SERVICE;
+import static digit.academy.tutorial.config.ServiceConstants.ADVOCATE_REGISTER_ACTION;
+import static digit.academy.tutorial.config.ServiceConstants.ADVOCATE_WORKFLOW_MODULE_NAME;
 
 @Service
 public class AdvocateService {
@@ -26,6 +30,7 @@ public class AdvocateService {
     private final Producer producer;
     private final Configuration config;
     private final IdgenUtil idgenUtil;
+    private final WorkflowUtil workflowUtil;
     private final ObjectMapper objectMapper;
     private final AdvocateRepository advocateRepository;
 
@@ -33,12 +38,14 @@ public class AdvocateService {
                            Producer producer,
                            Configuration config,
                            IdgenUtil idgenUtil,
+                           WorkflowUtil workflowUtil,
                            ObjectMapper objectMapper,
                            AdvocateRepository advocateRepository) {
         this.advocateValidator = advocateValidator;
         this.producer = producer;
         this.config = config;
         this.idgenUtil = idgenUtil;
+        this.workflowUtil = workflowUtil;
         this.objectMapper = objectMapper;
         this.advocateRepository = advocateRepository;
     }
@@ -66,7 +73,6 @@ public class AdvocateService {
 
         advocate.setId(UUID.randomUUID());
         advocate.setApplicationNumber(applicationNumber);
-        advocate.setStatus("REGISTRATION_REQUESTED");
         advocate.setIsActive(true);
 
         AuditDetails auditDetails = AuditDetails.builder()
@@ -77,6 +83,22 @@ public class AdvocateService {
                 .build();
 
         advocate.setAuditDetails(auditDetails);
+
+        Workflow registerWorkflow = Workflow.builder()
+                .action(ADVOCATE_REGISTER_ACTION)
+                .build();
+
+        String workflowStatus = workflowUtil.updateWorkflowStatus(
+                commonRequestInfo,
+                advocate.getTenantId(),
+                advocate.getApplicationNumber(),
+                ADVOCATE_BUSINESS_SERVICE,
+                registerWorkflow,
+                ADVOCATE_WORKFLOW_MODULE_NAME
+        );
+
+        advocate.setWorkflow(registerWorkflow);
+        advocate.setStatus(workflowStatus);
         producer.push(config.getAdvocateCreateTopic(), request);
 
         ResponseInfo responseInfo = ResponseInfo.builder()

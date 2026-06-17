@@ -49,5 +49,9 @@ public class ServiceConstants {
     public static final String TENANTID = "?tenantId=";
     public static final String BUSINESS_SERVICES = "&businessServices=";
 
+    public static final String ADVOCATE_BUSINESS_SERVICE = "DIGIT_ASSIGNMENT_ADVOCATE";
+    public static final String ADVOCATE_WORKFLOW_MODULE_NAME = "digit-assignment";
+    public static final String ADVOCATE_REGISTER_ACTION = "REGISTER";
+
 
 }

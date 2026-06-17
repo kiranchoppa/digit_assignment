@@ -1,0 +1,88 @@
+{
+  "RequestInfo": {
+    "apiId": "digit-assignment",
+    "ver": "1.0",
+    "ts": 1718600000000,
+    "action": "create",
+    "msgId": "workflow-config-create",
+    "authToken": "local-test-token",
+    "userInfo": {
+      "uuid": "test-user-uuid",
+      "type": "EMPLOYEE",
+      "tenantId": "ap",
+      "roles": [
+        {
+          "code": "EMPLOYEE",
+          "tenantId": "ap"
+        }
+      ]
+    }
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "ap",
+      "businessService": "DIGIT_ASSIGNMENT_ADVOCATE",
+      "business": "digit-assignment",
+      "businessServiceSla": 604800000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "REGISTER",
+              "nextState": "REGISTRATION_REQUESTED",
+              "roles": ["ADVOCATE"]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "REGISTRATION_REQUESTED",
+          "applicationStatus": "REGISTRATION_REQUESTED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "APPROVE",
+              "nextState": "REGISTERED",
+              "roles": ["NYAY_MITRA", "EMPLOYEE"]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": ["NYAY_MITRA", "EMPLOYEE"]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "REGISTERED",
+          "applicationStatus": "REGISTERED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        },
+        {
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        }
+      ]
+    }
+  ]
+}
