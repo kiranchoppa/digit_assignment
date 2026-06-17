@@ -3,6 +3,7 @@ package digit.academy.tutorial.validator;
 import digit.academy.tutorial.util.MdmsUtil;
 import digit.academy.tutorial.web.models.Advocate;
 import digit.academy.tutorial.web.models.AdvocateRequest;
+import digit.academy.tutorial.web.models.AdvocateSearchRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -57,6 +58,20 @@ public class AdvocateValidator {
         }
 
         validateAdvocateType(request, advocate);
+    }
+
+    public void validateSearchRequest(AdvocateSearchRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("AdvocateSearchRequest cannot be null");
+        }
+
+        if (request.getRequestInfo() == null) {
+            throw new IllegalArgumentException("RequestInfo is required");
+        }
+
+        if (!StringUtils.hasText(request.getTenantId())) {
+            throw new IllegalArgumentException("tenantId is required");
+        }
     }
 
     private void validateAdvocateType(AdvocateRequest request, Advocate advocate) {
